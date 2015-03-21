@@ -1,0 +1,1 @@
+c-platform是基于Hibernate,Spring,SpringMVC,Spring Data JPA的技术开发框架，主体语言java。物理上c-platform以标准的三层架构设计，分客户端、服务端、数据库端；逻辑上c-platform以多层架构设计，包括表现层(view)、控制层(controller)、业务对象层(service)、视图对象层(dto)、实体对象层(domain)、数据访问层(repository)等。
