@@ -16,11 +16,12 @@ public final class Specification<T extends IdEntity> implements org.springframew
 	
 	@Override
 	public Predicate toPredicate(Root<T> r, CriteriaQuery<?> q, CriteriaBuilder b) {
-		Predicate[] predicates = new Predicate[keywords.length];
+		Predicate[] predicates = new Predicate[keywords.length * searchFields.length];
 
+		int index = 0;
 		for(int i=0,len=keywords.length; i<len; i++) {
 			for(int j=0,len2=searchFields.length; j<len2; j++) {
-				predicates[i] = b.like(r.get(searchFields[j]).as(String.class), "%"+keywords[i]+"%");
+				predicates[index++] = b.like(r.get(searchFields[j]).as(String.class), "%"+keywords[i]+"%");
 				q.where(b.or(predicates[i]));
 			}
 		}

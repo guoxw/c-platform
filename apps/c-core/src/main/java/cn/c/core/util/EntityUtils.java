@@ -98,6 +98,20 @@ public class EntityUtils {
 		return object;
 	}
 	
+	public static Method getMethod(Class<?> clazz, String methodName, Class<?>[] parameterTypes) {
+		Method method = null;
+		try {
+			method = clazz.getMethod(methodName, parameterTypes);
+		} catch (NoSuchMethodException e) {
+			//e.printStackTrace();
+			throw new cn.c.core.excepion.NoSuchMethodException(e);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return method;
+	}
+	
 	
 	public static void getAllDeclaredFields(List<Field> fieldList, Class<?> superClass){
 		if(superClass.equals(Object.class)) {
@@ -115,31 +129,45 @@ public class EntityUtils {
 		return method != null ? true : false;
 	}
 
-	public static Method getGeterMethod( Class<?> clazz, String filedName) {
+	public static Method getMethod(Class<?> clazz, String methodName) {
+		return getMethod(clazz, methodName, false);
+	}
+	
+	public static Method getMethod(Class<?> clazz, String methodName, boolean required) {
+		Method method = null;
+		if(required) {
+			method = getMethod(clazz, methodName, new Class[]{});
+		} else {
+			Method[] mArray = clazz.getMethods();
+			for (Method m : mArray) {
+				if (m.getName().equals(methodName)) {
+					method = m;
+					break;
+				}
+			}
+		}
+		return method;
+	}
+	
+	public static Method getGeterMethod(Class<?> clazz, String filedName) {
+		return getGeterMethod(clazz, filedName, false);
+	}
+	public static Method getGeterMethod(Class<?> clazz, String filedName, boolean required) {
 		String methodNameSuffix = filedName.toUpperCase().charAt(0) + filedName.substring(1);
-		Method method = getMethod(clazz, "get" + methodNameSuffix);
+		Method method = getMethod(clazz, "get" + methodNameSuffix, required);
 		if(method == null) {
-			method = getMethod(clazz, "is" + methodNameSuffix);
+			method = getMethod(clazz, "is" + methodNameSuffix, required);
 		}
 		return method;
 	}
 
 	public static Method getSeterMethod(Class<?> clazz, String filedName) {
-
+		return getSeterMethod(clazz, filedName, false);
+	}
+	public static Method getSeterMethod(Class<?> clazz, String filedName, boolean required) {
 		String methodName = "set" + filedName.toUpperCase().charAt(0) + filedName.substring(1);
-		return getMethod(clazz, methodName);
+		return getMethod(clazz, methodName, required);
 	}
-
-	public static Method getMethod(Class<?> clazz, String methodName) {
-		Method[] mArray = clazz.getMethods();
-		for (Method m : mArray) {
-			if (m.getName().equals(methodName)) {
-				return m;
-			}
-		}
-		return null;
-	}
-	
 
 
 }

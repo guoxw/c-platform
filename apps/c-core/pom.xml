@@ -119,17 +119,6 @@
 		</dependency>
 
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>nexus</id>
-			<name>nexus repository</name>
-			<url>http://app.gem-soft.com/nexus/content/groups/public/</url>
-		</repository>
-		<repository>
-			<id>oz</id>
-			<name>oz nexus repository</name>
-			<url>http://app.gem-soft.com/nexus/content/groups/oz/</url>
-		</repository>
-	</repositories>
+
 
 </project>

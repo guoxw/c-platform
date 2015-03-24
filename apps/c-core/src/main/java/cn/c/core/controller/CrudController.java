@@ -25,6 +25,7 @@ import cn.c.core.domain.IdEntity;
 import cn.c.core.excepion.ValidationExcepion;
 import cn.c.core.service.CrudService;
 import cn.c.core.util.EntityUtils;
+import cn.c.core.util.StringUtils;
 
 /**
  * 
@@ -44,13 +45,6 @@ public abstract class CrudController<T extends IdEntity, S extends CrudService<T
 //	}
 	
 	/**
-	 * 分页
-	 * @param pageable url看起来像这样的:  .../page?size=3&page=2&sort=name,desc
-	 * keyword
-	 * @param modelAndView
-	 * @return
-	 */
-	/**
 	 * 分页+查询 
 	 * @param pageable url看起来像这样的:  .../page?size=3&page=2&sort=name,desc
 	 * @param paginationType 分页方式
@@ -62,9 +56,13 @@ public abstract class CrudController<T extends IdEntity, S extends CrudService<T
 	public ModelAndView list(Pageable pageable, 
 			@RequestParam(required = false, defaultValue=PaginationType.BACKSTAGE_PAGINATION+"") int paginationType,
 			@RequestParam(required = false, defaultValue="") String keyword,
+			@RequestParam(required = false, defaultValue="") String search,
 			ModelAndView modelAndView) {
 		modelAndView.setViewName(this.getPrefix() + this.getUriDirector() + LIST_PATH);
 		modelAndView.addObject("paginationType", paginationType);
+		if(StringUtils.isNullOrEmpty(keyword)) {
+			keyword = search;
+		}
 		Iterable<T> items = this.getService().getItems(keyword, paginationType, pageable);
 		
 		this.initList(items);
@@ -157,8 +155,12 @@ public abstract class CrudController<T extends IdEntity, S extends CrudService<T
 	public Map<String, Object> listByAjax(Pageable pageable, 
 			@RequestParam(required = false, defaultValue=PaginationType.BACKSTAGE_PAGINATION+"") int paginationType,
 			@RequestParam(required = false, defaultValue="") String keyword,
+			@RequestParam(required = false, defaultValue="") String search,
 			Map<String, Object> resultMap) {
 		resultMap.put("paginationType", paginationType);
+		if(StringUtils.isNullOrEmpty(keyword)) {
+			keyword = search;
+		}
 		Iterable<T> items = this.getService().getItems(keyword, paginationType, pageable);
 		
 		this.initList(items);
@@ -223,7 +225,7 @@ public abstract class CrudController<T extends IdEntity, S extends CrudService<T
 			} else if(o instanceof Iterable) {
 				continue;
 			} else {
-				Method method = EntityUtils.getSeterMethod(t.getClass(), key);
+				Method method = EntityUtils.getSeterMethod(t.getClass(), key, true);
 				EntityUtils.invoke(t, method, submitMap.get(key));
 				//m.invoke(t, submitMap.get(key));	//反射
 			}

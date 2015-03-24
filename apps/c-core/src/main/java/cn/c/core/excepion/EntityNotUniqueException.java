@@ -4,7 +4,7 @@
  * 
  * @author hz453@126.com
  */
-public class EntityNotUniqueException extends PlatformException {
+public class EntityNotUniqueException extends BusinessException {
 
 	private static final long serialVersionUID = -8505681447362110460L;
 

@@ -1,7 +1,7 @@
 package cn.c.core.excepion;
 
 /**
- * 
+ * 平台上所有所有需要在抛出的异常,但不需要写try,catch;异常会在后台显示,
  * @author hz453@126.com
  */
 public class PlatformException extends RuntimeException{

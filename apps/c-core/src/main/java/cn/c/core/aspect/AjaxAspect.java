@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 
-import cn.c.core.excepion.PlatformException;
+import cn.c.core.excepion.BusinessException;
 
 
 /**
@@ -43,12 +43,12 @@ public class AjaxAspect {
 		try {
 			map = (Map<String, Object>)pjp.proceed();
 			map.put("success", true);
-		} catch (PlatformException pe) {
+		} catch (BusinessException be) {
 			map = new HashMap<String, Object>();
 			map.put("success", false);
-			map.put("message", pe.getMessage());
+			map.put("message", be.getMessage());
 			
-			pe.printStackTrace();
+			be.printStackTrace();
 		} catch (Exception e) {
 			map = new HashMap<String, Object>();
 			map.put("success", false);

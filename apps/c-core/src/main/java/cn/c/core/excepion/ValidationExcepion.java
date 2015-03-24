@@ -4,7 +4,7 @@
  * 
  * @author hz453@126.com
  */
-public class ValidationExcepion extends PlatformException {
+public class ValidationExcepion extends BusinessException {
 
 	private static final long serialVersionUID = 2155182923806210481L;
 	

@@ -4,7 +4,7 @@
  * 
  * @author hz453@126.com
  */
-public class EntityNotFoundException extends PlatformException {
+public class EntityNotFoundException extends BusinessException {
 
 	public EntityNotFoundException() {
 		super();

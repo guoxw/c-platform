@@ -50,6 +50,13 @@ public class Tests {
 		Assert.assertTrue(EntityUtils.containsMethod(TaskDto.class, "getCode"));
 
 	}
+	
+	@Test(expected=cn.c.core.excepion.NoSuchMethodException.class)
+	public void test002() {
+		Task parent = new Task();
+		//EntityUtils.getGeterMethod(parent.getClass(), "abc", true);
+		EntityUtils.getSeterMethod(parent.getClass(), "abc", true);
+	}
 
 	
 

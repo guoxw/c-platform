@@ -1,7 +1,7 @@
 package cn.c.core.excepion;
 
 /**
- * 
+ * 该异常数据是可以提交给前台显示的..用户是可以处理的.
  * @author hz453@126.com
  */
 public class BusinessException extends PlatformException {
