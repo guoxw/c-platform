@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import cn.c.core.domain.IdEntity;
+import cn.c.core.domain.Specification;
 
 /**
  * 
@@ -24,13 +25,13 @@ public interface CrudService<T extends IdEntity> extends SimpleService<T> {
 
     public Page<T> findAll(Pageable pageable);
     
-    public Iterable<T> findAll(String keyword);
+    public Iterable<T> findAll(Specification<T> specification);
 	
-	public Iterable<T> findAll(String keyword, Sort sort);
+	public Iterable<T> findAll(Specification<T> specification, Sort sort);
 
-    public Page<T> findAll(String keyword, Pageable pageable);
+    public Page<T> findAll(Specification<T> specification, Pageable pageable);
     
-    public Iterable<T> getItems(String keyword, int paginationType, Pageable pageable);
+    public Iterable<T> getItems(String keyword, int paginationType, Pageable pageable, Object... args);
 	
 	public T save(T entity);
 	
