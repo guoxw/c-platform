@@ -135,16 +135,15 @@ public class EntityUtils {
 	
 	public static Method getMethod(Class<?> clazz, String methodName, boolean required) {
 		Method method = null;
-		if(required) {
-			method = getMethod(clazz, methodName, new Class[]{});
-		} else {
-			Method[] mArray = clazz.getMethods();
-			for (Method m : mArray) {
-				if (m.getName().equals(methodName)) {
-					method = m;
-					break;
-				}
+		Method[] mArray = clazz.getMethods();
+		for (Method m : mArray) {
+			if (m.getName().equals(methodName)) {
+				method = m;
+				break;
 			}
+		}
+		if(required && method==null) {
+			throw new cn.c.core.excepion.NoSuchMethodException(clazz.getPackage().getName());
 		}
 		return method;
 	}

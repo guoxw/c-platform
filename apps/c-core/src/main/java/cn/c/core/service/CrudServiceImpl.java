@@ -12,8 +12,8 @@ import org.springframework.data.domain.Sort;
 import cn.c.core.common.constant.PaginationType;
 import cn.c.core.dao.CrudDao;
 import cn.c.core.domain.IdEntity;
-import cn.c.core.domain.Specification;
 import cn.c.core.repository.CrudRepository;
+import cn.c.core.repository.domain.SpecificationImpl;
 import cn.c.core.util.EntityUtils;
 import cn.c.core.util.StringUtils;
 
@@ -64,69 +64,82 @@ public abstract class CrudServiceImpl<T extends IdEntity, R extends CrudReposito
 	@Override
 	public Iterable<T> findAll() {
 		Iterable<T> entitys = this.repository.findAll();
-		this.afterLoad(entitys);
 		return entitys;
 	}
 	
 	@Override
 	public Iterable<T> findAll(Sort sort) {
 		Iterable<T> entitys = this.repository.findAll(sort);
-		this.afterLoad(entitys);
 		return entitys;
 	}
 	
 	@Override
     public Page<T> findAll(Pageable pageable) {
-		Page<T> entitys = this.repository.findAll(pageable);
-		this.afterLoad(entitys);
-		return entitys;
-	}
-	
-	@Override
-	public Iterable<T> findAll(String keyword) {
+//		AccurateSearch[] AccurateSearchs = new AccurateSearchRequest[]{new AccurateSearchRequest("flowStatus","equal", 20)};
+//		Page<T> entitys = this.repository.findAll(new Specification<T>(this.getSearchField(), new String[]{}, AccurateSearchs), pageable);
 		
-		Iterable<T> entitys = this.repository.findAll(new Specification<T>(this.getSearchField(), keyword.split(" ")));
+		Page<T> entitys = this.repository.findAll(pageable);
 		return entitys;
 	}
 	
 	@Override
-	public Iterable<T> findAll(String keyword, Sort sort) {
-		Iterable<T> entitys = this.repository.findAll(new Specification<T>(this.getSearchField(), keyword.split(" ")), sort);
+	public Iterable<T> findAll(SpecificationImpl<T> specification) {
+		Iterable<T> entitys = this.repository.findAll(specification);
 		return entitys;
 	}
 	
 	@Override
-	public Page<T> findAll(String keyword, Pageable pageable) {
-		Page<T> entitys = this.repository.findAll(new Specification<T>(this.getSearchField(), keyword.split(" ")), pageable);
+	public Iterable<T> findAll(SpecificationImpl<T> specification, Sort sort) {
+		Iterable<T> entitys = this.repository.findAll(specification, sort);
 		return entitys;
 	}
 	
 	@Override
-	public Iterable<T> getItems(String keyword, int paginationType, Pageable pageable) {
+	public Page<T> findAll(SpecificationImpl<T> specification, Pageable pageable) {
+		Page<T> entitys = this.repository.findAll(specification, pageable);
+		return entitys;
+	}
+	
+	@Override
+	public Iterable<T> getItems(String keyword, int paginationType, Pageable pageable, Object... args) {
+		String[] keywords = null;
+		SpecificationImpl<T> specification = null;
+		
+		if(StringUtils.hasText(keyword)) {
+			keywords = keyword.split(" ");
+		} else {
+			keywords = new String[]{};
+		}
+		specification = this.beforeGetItems(paginationType, pageable, keywords, args);
+		if(specification == null && StringUtils.hasText(keyword)) {
+			specification = new SpecificationImpl<T>(this.getSearchField(), keywords);
+		}
+		
 		Iterable<T> items = null;
 		if(PaginationType.BACKSTAGE_PAGINATION == paginationType) {
 			PageRequest pageRequest = (PageRequest) pageable;
-			if(StringUtils.hasText(keyword)) {
-				items = this.findAll(keyword, pageable);
+			if(specification != null) {
+				items = this.findAll(specification, pageable);
 			} else {
 				items = this.findAll(pageRequest);
 			}
 			
 		} else {
-			if(pageable.getSort()!=null) {
-				if(StringUtils.hasText(keyword)) {
-					items = this.findAll(keyword, pageable.getSort());
+			if(pageable.getSort() != null) {
+				if(specification != null) {
+					items = this.findAll(specification, pageable.getSort());
 				} else {
 					items = this.findAll(pageable.getSort());
 				}
 			} else {
-				if(StringUtils.hasText(keyword)) {
-					items = this.findAll(keyword);
+				if(specification != null) {
+					items = this.findAll(specification);
 				} else {
 					items = this.findAll();
 				}
 			}
 		}
+		this.afterGetItems(items);
 		return items;
 	}
 	
@@ -211,7 +224,8 @@ public abstract class CrudServiceImpl<T extends IdEntity, R extends CrudReposito
 	}
 	
 	public void afterLoad(T entity) {}
-	public void afterLoad(Iterable<T> entitys) {}
+	public SpecificationImpl<T> beforeGetItems(int paginationType, Pageable pageable, String[] keywords, Object... args) { return null;}
+	public void afterGetItems(Iterable<T> entitys) {}
 	
 	public void beforeSave(T entity) {}
 	public void beforeSave(Iterable<T> entitys) {}
