@@ -83,19 +83,31 @@ public abstract class CrudServiceImpl<T extends IdEntity, R extends CrudReposito
 	}
 	
 	@Override
+<<<<<<< HEAD
 	public Iterable<T> findAll(SpecificationImpl<T> specification) {
+=======
+	public Iterable<T> findAll(Specification<T> specification) {
+>>>>>>> 19244df4f265f330c931ed41db4863cdb69bf22c
 		Iterable<T> entitys = this.repository.findAll(specification);
 		return entitys;
 	}
 	
 	@Override
+<<<<<<< HEAD
 	public Iterable<T> findAll(SpecificationImpl<T> specification, Sort sort) {
+=======
+	public Iterable<T> findAll(Specification<T> specification, Sort sort) {
+>>>>>>> 19244df4f265f330c931ed41db4863cdb69bf22c
 		Iterable<T> entitys = this.repository.findAll(specification, sort);
 		return entitys;
 	}
 	
 	@Override
+<<<<<<< HEAD
 	public Page<T> findAll(SpecificationImpl<T> specification, Pageable pageable) {
+=======
+	public Page<T> findAll(Specification<T> specification, Pageable pageable) {
+>>>>>>> 19244df4f265f330c931ed41db4863cdb69bf22c
 		Page<T> entitys = this.repository.findAll(specification, pageable);
 		return entitys;
 	}
@@ -103,7 +115,11 @@ public abstract class CrudServiceImpl<T extends IdEntity, R extends CrudReposito
 	@Override
 	public Iterable<T> getItems(String keyword, int paginationType, Pageable pageable, Object... args) {
 		String[] keywords = null;
+<<<<<<< HEAD
 		SpecificationImpl<T> specification = null;
+=======
+		Specification<T> specification = null;
+>>>>>>> 19244df4f265f330c931ed41db4863cdb69bf22c
 		
 		if(StringUtils.hasText(keyword)) {
 			keywords = keyword.split(" ");
@@ -112,7 +128,11 @@ public abstract class CrudServiceImpl<T extends IdEntity, R extends CrudReposito
 		}
 		specification = this.beforeGetItems(paginationType, pageable, keywords, args);
 		if(specification == null && StringUtils.hasText(keyword)) {
+<<<<<<< HEAD
 			specification = new SpecificationImpl<T>(this.getSearchField(), keywords);
+=======
+			specification = new Specification<T>(this.getSearchField(), keywords);
+>>>>>>> 19244df4f265f330c931ed41db4863cdb69bf22c
 		}
 		
 		Iterable<T> items = null;
@@ -224,7 +244,11 @@ public abstract class CrudServiceImpl<T extends IdEntity, R extends CrudReposito
 	}
 	
 	public void afterLoad(T entity) {}
+<<<<<<< HEAD
 	public SpecificationImpl<T> beforeGetItems(int paginationType, Pageable pageable, String[] keywords, Object... args) { return null;}
+=======
+	public Specification<T> beforeGetItems(int paginationType, Pageable pageable, String[] keywords, Object... args) { return null;}
+>>>>>>> 19244df4f265f330c931ed41db4863cdb69bf22c
 	public void afterGetItems(Iterable<T> entitys) {}
 	
 	public void beforeSave(T entity) {}
