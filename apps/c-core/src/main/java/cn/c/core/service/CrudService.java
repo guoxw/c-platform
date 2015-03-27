@@ -5,11 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import cn.c.core.domain.IdEntity;
-<<<<<<< HEAD
 import cn.c.core.repository.domain.SpecificationImpl;
-=======
-import cn.c.core.domain.Specification;
->>>>>>> 19244df4f265f330c931ed41db4863cdb69bf22c
+
 
 /**
  * 
@@ -29,19 +26,11 @@ public interface CrudService<T extends IdEntity> extends SimpleService<T> {
 
     public Page<T> findAll(Pageable pageable);
     
-<<<<<<< HEAD
     public Iterable<T> findAll(SpecificationImpl<T> specification);
 	
 	public Iterable<T> findAll(SpecificationImpl<T> specification, Sort sort);
 
     public Page<T> findAll(SpecificationImpl<T> specification, Pageable pageable);
-=======
-    public Iterable<T> findAll(Specification<T> specification);
-	
-	public Iterable<T> findAll(Specification<T> specification, Sort sort);
-
-    public Page<T> findAll(Specification<T> specification, Pageable pageable);
->>>>>>> 19244df4f265f330c931ed41db4863cdb69bf22c
     
     public Iterable<T> getItems(String keyword, int paginationType, Pageable pageable, Object... args);
 	
